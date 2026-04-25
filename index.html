@@ -1,0 +1,278 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.week { display: flex; flex-direction: column; gap: 12px; padding: 1rem 0; }
+.day-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+.day-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; cursor: pointer; user-select: none; }
+.day-header:hover { background: var(--color-background-secondary); }
+.day-left { display: flex; align-items: center; gap: 10px; }
+.day-badge { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+.day-name { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+.day-outcome { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
+.chevron { font-size: 11px; color: var(--color-text-tertiary); transition: transform 0.2s; }
+.chevron.open { transform: rotate(180deg); }
+.day-body { display: none; border-top: 0.5px solid var(--color-border-tertiary); padding: 14px 16px; }
+.day-body.open { display: block; }
+.section-label { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; margin-top: 14px; }
+.section-label:first-child { margin-top: 0; }
+.block { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
+.block-time { font-size: 11px; color: var(--color-text-tertiary); min-width: 72px; padding-top: 2px; }
+.block-pill { font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
+.block-desc { font-size: 13px; color: var(--color-text-primary); flex: 1; }
+.block-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+.pill-deepwork { background: #E6F1FB; color: #0C447C; }
+.pill-school { background: #EAF3DE; color: #27500A; }
+.pill-train { background: #FAECE7; color: #712B13; }
+.pill-admin { background: #F1EFE8; color: #444441; }
+.pill-reset { background: #FAEEDA; color: #633806; }
+.pill-supp { background: #FBEAF0; color: #72243E; }
+.energy-bar { display: flex; gap: 4px; margin-bottom: 12px; }
+.energy-seg { height: 6px; border-radius: 3px; flex: 1; }
+.e-low { background: #D3D1C7; }
+.e-mid { background: #FAC775; }
+.e-high { background: #5DCAA5; }
+.e-legend { display: flex; gap: 12px; margin-bottom: 14px; }
+.e-legend span { font-size: 11px; color: var(--color-text-secondary); display: flex; align-items: center; gap: 4px; }
+.e-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.tip-box { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; margin-top: 12px; font-size: 12px; color: var(--color-text-secondary); }
+.tip-box strong { color: var(--color-text-primary); font-weight: 500; }
+.review-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 16px; margin-top: 12px; }
+.review-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 12px; }
+.review-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+.review-num { width: 22px; height: 22px; border-radius: 50%; background: #EEEDFE; color: #3C3489; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.review-text { font-size: 13px; color: var(--color-text-primary); }
+.review-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
+.tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.tab { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); cursor: pointer; font-family: var(--font-sans); }
+.tab.active { background: var(--color-background-info); color: var(--color-text-info); border-color: transparent; font-weight: 500; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+</style>
+
+<h2 class="sr-only">Plano semanal interativo de segunda a sexta com blocos de tempo, treinos, suplementação e revisão semanal</h2>
+
+<div class="tabs">
+  <button class="tab active" onclick="switchTab('semana')">Semana</button>
+  <button class="tab" onclick="switchTab('suplementos')">Suplementos</button>
+  <button class="tab" onclick="switchTab('revisao')">Revisão semanal</button>
+</div>
+
+<div class="tab-content active" id="tab-semana">
+
+<div class="e-legend">
+  <span><span class="e-dot" style="background:#D3D1C7"></span>Baixa energia</span>
+  <span><span class="e-dot" style="background:#FAC775"></span>Média</span>
+  <span><span class="e-dot" style="background:#5DCAA5"></span>Pico de foco</span>
+</div>
+
+<div class="week" id="days-container"></div>
+</div>
+
+<div class="tab-content" id="tab-suplementos">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:12px;">
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;">
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px;">Com café da manhã</div>
+      <div style="font-size:13px;color:var(--color-text-primary);font-weight:500;">Multivitamínico</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);">+ Zinco + Ômega 3</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;">
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px;">Pré ou pós-treino</div>
+      <div style="font-size:13px;color:var(--color-text-primary);font-weight:500;">Creatina 3–5g</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);">Qualquer horário fixo</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;">
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px;">Meta diária</div>
+      <div style="font-size:13px;color:var(--color-text-primary);font-weight:500;">6–8 ovos</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);">+ 2g/kg proteína total</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;">
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px;">Transporte diário</div>
+      <div style="font-size:13px;color:var(--color-text-primary);font-weight:500;">Bike 20–30km</div>
+      <div style="font-size:12px;color:var(--color-text-secondary);">Cardio passivo incluso</div>
+    </div>
+  </div>
+  <div class="tip-box"><strong>Dica:</strong> Ômega 3 com gordura (ovo, abacate) aumenta absorção. Zinco longe de cálcio. Creatina: consistência diária > horário.</div>
+</div>
+
+<div class="tab-content" id="tab-revisao">
+  <div class="review-card">
+    <div class="review-title">Revisão semanal — domingo (15 min)</div>
+    <div class="review-item"><div class="review-num">1</div><div><div class="review-text">O que funcionou bem?</div><div class="review-sub">Blocos que respeitei, treinos feitos, capítulos de Gelfand concluídos</div></div></div>
+    <div class="review-item"><div class="review-num">2</div><div><div class="review-text">O que travou?</div><div class="review-sub">Onde perdi tempo, onde errei a estimativa, o que pulei</div></div></div>
+    <div class="review-item"><div class="review-num">3</div><div><div class="review-text">Gargalo da semana</div><div class="review-sub">1 único padrão que, se resolvido, melhora tudo</div></div></div>
+    <div class="review-item"><div class="review-num">4</div><div><div class="review-text">Ajuste para próxima semana</div><div class="review-sub">Máximo 1 mudança de processo. Simples e testável</div></div></div>
+    <div class="review-item"><div class="review-num">5</div><div><div class="review-text">Status Gelfand</div><div class="review-sub">Capítulo atual, exercícios pendentes, dúvidas para pesquisar</div></div></div>
+    <div class="tip-box" style="margin-top:0;"><strong>Regra:</strong> Se a revisão durar mais de 20 min, você está analisando demais. O objetivo é decidir, não ruminar.</div>
+  </div>
+</div>
+
+<script>
+const days = [
+  {
+    name: "Segunda-feira",
+    outcome: "Iniciar Gelfand com foco total + Força",
+    color: "#E6F1FB", textColor: "#0C447C",
+    emoji: "S",
+    emojiDark: "#378ADD",
+    blocks: [
+      { time: "6h00", type: "admin", label: "Rotina", desc: "Acorda, café, ovos (2-3), suplementos", energy: "low" },
+      { time: "6h30–7h20", type: "bike", label: "Deslocamento", desc: "Bike para escola (20–30km)", energy: "low" },
+      { time: "7h30–12h", type: "school", label: "Escola", desc: "Aulas — modo passivo/ativo", energy: "mid" },
+      { time: "13h–14h30", type: "deepwork", label: "Gelfand", desc: "Bloco 1: Leitura + exercícios (50 min) → pausa 10 min → 30 min resolução", energy: "high" },
+      { time: "14h30–15h", type: "reset", label: "Buffer", desc: "Lanche proteico, revisão rápida das dúvidas", energy: "mid" },
+      { time: "15h–16h", type: "school", label: "Escola", desc: "Bloco de estudo escolar (50 min)", energy: "high" },
+      { time: "17h–19h", type: "train", label: "Força", desc: "Agachamento 3×6-12 / Supino 3×6-12 / Terra 3×6-12", energy: "mid" },
+      { time: "19h30–20h", type: "admin", label: "Alimentação", desc: "Refeição principal, proteína, ovos restantes", energy: "low" },
+      { time: "22h–23h", type: "reset", label: "Sono", desc: "Sem tela 30 min antes — alvo: 8h de sono", energy: "low" },
+    ],
+    tip: "Segunda é o dia de entrada. Priorize Gelfand enquanto o cérebro está descansado."
+  },
+  {
+    name: "Terça-feira",
+    outcome: "Avançar em Gelfand + Escola + Basquete",
+    color: "#E1F5EE", textColor: "#085041",
+    emoji: "T",
+    emojiDark: "#1D9E75",
+    blocks: [
+      { time: "6h–7h20", type: "admin", label: "Rotina + Bike", desc: "Café, ovos, suplementos + deslocamento", energy: "low" },
+      { time: "7h30–12h", type: "school", label: "Escola", desc: "Aulas do dia", energy: "mid" },
+      { time: "13h–14h30", type: "deepwork", label: "Gelfand", desc: "Bloco 2: Continuar exercícios do dia anterior + novos (50 min + revisão)", energy: "high" },
+      { time: "14h30–15h30", type: "school", label: "Escola", desc: "Bloco escolar 50 min — matéria mais difícil da semana", energy: "high" },
+      { time: "15h30–16h", type: "reset", label: "Buffer", desc: "Lanche, revisão das tarefas abertas", energy: "mid" },
+      { time: "17h–19h30", type: "train", label: "Basquete", desc: "Behind the back / Jump shot / Euro step — até cansar com qualidade", energy: "mid" },
+      { time: "20h–22h", type: "admin", label: "Recuperação", desc: "Janta proteica, banho, relaxar sem telas", energy: "low" },
+    ],
+    tip: "Terça é dia duplo (Gelfand + escola). Não adicione mais nada — o basquete já é intenso."
+  },
+  {
+    name: "Quarta-feira",
+    outcome: "Consolidar Gelfand + 2º treino de força",
+    color: "#FAECE7", textColor: "#712B13",
+    emoji: "Q",
+    emojiDark: "#D85A30",
+    blocks: [
+      { time: "6h–7h20", type: "admin", label: "Rotina + Bike", desc: "Café, ovos, suplementos + deslocamento", energy: "low" },
+      { time: "7h30–12h", type: "school", label: "Escola", desc: "Aulas", energy: "mid" },
+      { time: "13h–13h50", type: "deepwork", label: "Gelfand", desc: "Bloco de revisão: refazer exercícios errados, consolidar conceitos", energy: "high" },
+      { time: "14h–15h", type: "school", label: "Escola", desc: "Bloco escolar — tarefa ou revisão de matéria", energy: "high" },
+      { time: "15h–15h30", type: "reset", label: "Buffer", desc: "Buffer de 30 min para o inesperado", energy: "mid" },
+      { time: "17h–19h", type: "train", label: "Força", desc: "Agachamento / Supino / Terra — mesmo protocolo 3×6-12", energy: "mid" },
+      { time: "19h30–22h", type: "admin", label: "Noite livre", desc: "Janta, descanso ativo, preparo para quinta", energy: "low" },
+    ],
+    tip: "Quarta é o meio da semana. Use o bloco Gelfand para revisar, não avançar — solidifica mais."
+  },
+  {
+    name: "Quinta-feira",
+    outcome: "Avançar capítulo Gelfand + escola em dia",
+    color: "#FAEEDA", textColor: "#633806",
+    emoji: "Q",
+    emojiDark: "#BA7517",
+    blocks: [
+      { time: "6h–7h20", type: "admin", label: "Rotina + Bike", desc: "Café, ovos, suplementos + deslocamento", energy: "low" },
+      { time: "7h30–12h", type: "school", label: "Escola", desc: "Aulas", energy: "mid" },
+      { time: "13h–14h30", type: "deepwork", label: "Gelfand", desc: "Bloco 50 min: avançar novo trecho + 30 min exercícios novos", energy: "high" },
+      { time: "14h30–15h30", type: "school", label: "Escola", desc: "Bloco escolar — provas futuras, revisão ou tarefa", energy: "high" },
+      { time: "15h30–17h", type: "reset", label: "Buffer / Admin", desc: "Buffer, lanche, organizar o que falta pra sexta", energy: "mid" },
+      { time: "17h–19h", type: "train", label: "Basquete (opcional)", desc: "Sessão leve ou descanso ativo — ouça o corpo após terça", energy: "mid" },
+      { time: "20h+", type: "admin", label: "Noite", desc: "Janta, relaxar, dormir no horário", energy: "low" },
+    ],
+    tip: "Quinta é o segundo pico de produção. Aproveite o bloco da tarde para Gelfand difícil."
+  },
+  {
+    name: "Sexta-feira",
+    outcome: "Fechar a semana — Força + revisão Gelfand",
+    color: "#EEEDFE", textColor: "#3C3489",
+    emoji: "S",
+    emojiDark: "#7F77DD",
+    blocks: [
+      { time: "6h–7h20", type: "admin", label: "Rotina + Bike", desc: "Café, ovos, suplementos + deslocamento", energy: "low" },
+      { time: "7h30–12h", type: "school", label: "Escola", desc: "Aulas — último dia da semana escolar", energy: "mid" },
+      { time: "13h–13h50", type: "deepwork", label: "Gelfand", desc: "Bloco de encerramento: o que falta da semana? Marcar ponto de parada claro", energy: "high" },
+      { time: "14h–15h", type: "school", label: "Escola", desc: "Bloco escolar — fechar tarefas pendentes", energy: "high" },
+      { time: "15h–15h30", type: "reset", label: "Reset semanal", desc: "10 min: o que fiz? O que fica pra semana que vem?", energy: "mid" },
+      { time: "17h–19h", type: "train", label: "Força", desc: "3° treino de força — fecha o ciclo Seg/Qua/Sex", energy: "mid" },
+      { time: "19h30+", type: "admin", label: "Fim de semana", desc: "Janta, atividade social, descanso — sem culpa", energy: "low" },
+    ],
+    tip: "Sexta é para fechar ciclos, não abrir novos. Encerre o capítulo Gelfand ou marque o ponto de retomada."
+  }
+];
+
+const pillMap = {
+  deepwork: "pill-deepwork",
+  school: "pill-school",
+  train: "pill-train",
+  admin: "pill-admin",
+  reset: "pill-reset",
+  bike: "pill-admin",
+  supp: "pill-supp"
+};
+const labelMap = {
+  deepwork: "Foco profundo",
+  school: "Escola",
+  train: "Treino",
+  admin: "Rotina",
+  reset: "Reset",
+  bike: "Bike",
+  supp: "Suplemento"
+};
+
+function energyBar(blocks) {
+  const segs = blocks.map(b => {
+    const cls = b.energy === "high" ? "e-high" : b.energy === "mid" ? "e-mid" : "e-low";
+    return `<div class="energy-seg ${cls}"></div>`;
+  }).join("");
+  return `<div class="energy-bar">${segs}</div>`;
+}
+
+const container = document.getElementById("days-container");
+days.forEach((day, i) => {
+  const card = document.createElement("div");
+  card.className = "day-card";
+
+  const blocksHtml = day.blocks.map(b => `
+    <div class="block">
+      <div class="block-time">${b.time}</div>
+      <div style="flex:1">
+        <span class="block-pill ${pillMap[b.type]}">${labelMap[b.type]}</span>
+        <div class="block-desc" style="margin-top:4px;">${b.desc}</div>
+      </div>
+    </div>
+  `).join("");
+
+  card.innerHTML = `
+    <div class="day-header" onclick="toggle(${i})">
+      <div class="day-left">
+        <div class="day-badge" style="background:${day.color};color:${day.textColor};">${day.emoji}</div>
+        <div>
+          <div class="day-name">${day.name}</div>
+          <div class="day-outcome">${day.outcome}</div>
+        </div>
+      </div>
+      <span class="chevron" id="chev-${i}">▼</span>
+    </div>
+    <div class="day-body" id="body-${i}">
+      <div class="section-label">Nível de energia ao longo do dia</div>
+      ${energyBar(day.blocks)}
+      <div class="section-label">Blocos do dia</div>
+      ${blocksHtml}
+      <div class="tip-box"><strong>Foco do dia:</strong> ${day.tip}</div>
+    </div>
+  `;
+  container.appendChild(card);
+});
+
+function toggle(i) {
+  const body = document.getElementById("body-" + i);
+  const chev = document.getElementById("chev-" + i);
+  body.classList.toggle("open");
+  chev.classList.toggle("open");
+}
+
+function switchTab(name) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+  event.target.classList.add("active");
+  document.getElementById("tab-" + name).classList.add("active");
+}
+</script>
