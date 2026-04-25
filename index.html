@@ -67,6 +67,7 @@ main{max-width:720px;margin:0 auto;padding:24px 16px}
 .pill-train{background:#FAECE7;color:#712B13}
 .pill-admin{background:#F1EFE8;color:#444441}
 .pill-reset{background:#FAEEDA;color:#633806}
+.pill-english{background:#FBEAF0;color:#72243E}
 .block-desc{font-size:13px;color:var(--text);flex:1;margin-top:4px}
 .energy-bar{display:flex;gap:4px;margin-bottom:12px}
 .energy-seg{height:6px;border-radius:3px;flex:1}
@@ -220,7 +221,8 @@ const days = [
       {time:"14h30–15h",type:"reset",desc:"Lanche proteico, revisão rápida das dúvidas",energy:"mid"},
       {time:"15h–16h",type:"school",desc:"Bloco de estudo escolar (50 min)",energy:"high"},
       {time:"17h–19h",type:"train",desc:"Agachamento 3×6-12 / Supino 3×6-12 / Terra 3×6-12",energy:"mid"},
-      {time:"19h30–20h",type:"admin",desc:"Refeição principal, proteína, ovos restantes",energy:"low"},
+      {time:"19h–20h",type:"english",desc:"Inglês com Prof. Matheus — aula ao vivo",energy:"mid"},
+      {time:"20h–20h30",type:"admin",desc:"Refeição principal, proteína, ovos restantes",energy:"low"},
       {time:"22h–23h",type:"reset",desc:"Sem tela 30 min antes — alvo: 8h de sono",energy:"low"},
     ],
     tip:"Segunda é o dia de entrada. Priorize Gelfand enquanto o cérebro está descansado."
@@ -249,7 +251,8 @@ const days = [
       {time:"14h–15h",type:"school",desc:"Bloco escolar — tarefa ou revisão de matéria",energy:"high"},
       {time:"15h–15h30",type:"reset",desc:"Buffer de 30 min para o inesperado",energy:"mid"},
       {time:"17h–19h",type:"train",desc:"Agachamento / Supino / Terra — mesmo protocolo 3×6-12",energy:"mid"},
-      {time:"19h30–22h",type:"admin",desc:"Janta, descanso ativo, preparo para quinta",energy:"low"},
+      {time:"19h–20h",type:"english",desc:"Inglês com Prof. Matheus — aula ao vivo",energy:"mid"},
+      {time:"20h–22h",type:"admin",desc:"Janta, descanso ativo, preparo para quinta",energy:"low"},
     ],
     tip:"Quarta é o meio da semana. Use o bloco Gelfand para revisar, não avançar — solidifica mais."
   },
@@ -283,8 +286,8 @@ const days = [
   }
 ];
 
-const pillMap={deepwork:"pill-deepwork",school:"pill-school",train:"pill-train",admin:"pill-admin",reset:"pill-reset"};
-const labelMap={deepwork:"Foco profundo",school:"Escola",train:"Treino",admin:"Rotina",reset:"Reset"};
+const pillMap={deepwork:"pill-deepwork",school:"pill-school",train:"pill-train",admin:"pill-admin",reset:"pill-reset",english:"pill-english"};
+const labelMap={deepwork:"Foco profundo",school:"Escola",train:"Treino",admin:"Rotina",reset:"Reset",english:"Inglês"};
 
 const dc = document.getElementById('days-container');
 days.forEach((day,i) => {
