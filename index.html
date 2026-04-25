@@ -1,278 +1,457 @@
-
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Central de Estudos</title>
 <style>
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: var(--font-sans); }
-.week { display: flex; flex-direction: column; gap: 12px; padding: 1rem 0; }
-.day-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
-.day-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; cursor: pointer; user-select: none; }
-.day-header:hover { background: var(--color-background-secondary); }
-.day-left { display: flex; align-items: center; gap: 10px; }
-.day-badge { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
-.day-name { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
-.day-outcome { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; }
-.chevron { font-size: 11px; color: var(--color-text-tertiary); transition: transform 0.2s; }
-.chevron.open { transform: rotate(180deg); }
-.day-body { display: none; border-top: 0.5px solid var(--color-border-tertiary); padding: 14px 16px; }
-.day-body.open { display: block; }
-.section-label { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 8px; margin-top: 14px; }
-.section-label:first-child { margin-top: 0; }
-.block { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; }
-.block-time { font-size: 11px; color: var(--color-text-tertiary); min-width: 72px; padding-top: 2px; }
-.block-pill { font-size: 12px; padding: 3px 10px; border-radius: 20px; font-weight: 500; }
-.block-desc { font-size: 13px; color: var(--color-text-primary); flex: 1; }
-.block-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
-.pill-deepwork { background: #E6F1FB; color: #0C447C; }
-.pill-school { background: #EAF3DE; color: #27500A; }
-.pill-train { background: #FAECE7; color: #712B13; }
-.pill-admin { background: #F1EFE8; color: #444441; }
-.pill-reset { background: #FAEEDA; color: #633806; }
-.pill-supp { background: #FBEAF0; color: #72243E; }
-.energy-bar { display: flex; gap: 4px; margin-bottom: 12px; }
-.energy-seg { height: 6px; border-radius: 3px; flex: 1; }
-.e-low { background: #D3D1C7; }
-.e-mid { background: #FAC775; }
-.e-high { background: #5DCAA5; }
-.e-legend { display: flex; gap: 12px; margin-bottom: 14px; }
-.e-legend span { font-size: 11px; color: var(--color-text-secondary); display: flex; align-items: center; gap: 4px; }
-.e-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-.tip-box { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; margin-top: 12px; font-size: 12px; color: var(--color-text-secondary); }
-.tip-box strong { color: var(--color-text-primary); font-weight: 500; }
-.review-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 16px; margin-top: 12px; }
-.review-title { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 12px; }
-.review-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
-.review-num { width: 22px; height: 22px; border-radius: 50%; background: #EEEDFE; color: #3C3489; font-size: 11px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.review-text { font-size: 13px; color: var(--color-text-primary); }
-.review-sub { font-size: 11px; color: var(--color-text-secondary); margin-top: 2px; }
-.tabs { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
-.tab { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); cursor: pointer; font-family: var(--font-sans); }
-.tab.active { background: var(--color-background-info); color: var(--color-text-info); border-color: transparent; font-weight: 500; }
-.tab-content { display: none; }
-.tab-content.active { display: block; }
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#ffffff;--bg2:#f5f5f3;--bg3:#efefec;
+  --text:#1a1a1a;--text2:#555;--text3:#999;
+  --border:rgba(0,0,0,0.1);--border2:rgba(0,0,0,0.18);
+  --info-bg:#E6F1FB;--info-text:#0C447C;
+  --success-bg:#EAF3DE;--success-text:#27500A;
+  --warn-bg:#FAEEDA;--warn-text:#633806;
+  --radius:8px;--radius-lg:12px;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1e;--bg2:#2c2c2e;--bg3:#3a3a3c;
+    --text:#f0f0f0;--text2:#aaa;--text3:#666;
+    --border:rgba(255,255,255,0.1);--border2:rgba(255,255,255,0.18);
+    --info-bg:#0c2a45;--info-text:#85B7EB;
+    --success-bg:#1a2e0a;--success-text:#97C459;
+    --warn-bg:#2e1f05;--warn-text:#EF9F27;
+  }
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg3);color:var(--text);min-height:100vh}
+
+/* NAV */
+nav{background:var(--bg);border-bottom:0.5px solid var(--border);padding:0 20px;display:flex;align-items:center;gap:0;position:sticky;top:0;z-index:100}
+.nav-logo{font-size:15px;font-weight:500;color:var(--text);padding:14px 16px 14px 0;border-right:0.5px solid var(--border);margin-right:8px}
+.nav-btn{font-size:13px;color:var(--text2);padding:14px 14px;cursor:pointer;border:none;background:transparent;font-family:inherit;border-bottom:2px solid transparent;transition:color .15s,border-color .15s}
+.nav-btn:hover{color:var(--text)}
+.nav-btn.active{color:var(--text);border-bottom-color:var(--text)}
+
+/* MAIN */
+main{max-width:720px;margin:0 auto;padding:24px 16px}
+.page{display:none}
+.page.active{display:block}
+
+/* CARDS GENÉRICOS */
+.card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;margin-bottom:12px}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none}
+.card-header:hover{background:var(--bg2)}
+.card-body{display:none;border-top:0.5px solid var(--border);padding:14px 16px}
+.card-body.open{display:block}
+.chev{font-size:11px;color:var(--text3);transition:transform .2s;display:inline-block}
+.chev.open{transform:rotate(180deg)}
+
+/* TABS */
+.tabs{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap}
+.tab{font-size:12px;padding:5px 12px;border-radius:20px;border:0.5px solid var(--border2);background:transparent;color:var(--text2);cursor:pointer;font-family:inherit;transition:background .15s}
+.tab.active{background:var(--info-bg);color:var(--info-text);border-color:transparent;font-weight:500}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* PLANO SEMANAL */
+.day-badge{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:500;flex-shrink:0}
+.day-name{font-size:14px;font-weight:500;color:var(--text)}
+.day-outcome{font-size:12px;color:var(--text2);margin-top:2px}
+.block{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.block-time{font-size:11px;color:var(--text3);min-width:72px;padding-top:2px}
+.block-pill{font-size:12px;padding:3px 10px;border-radius:20px;font-weight:500}
+.pill-deepwork{background:#E6F1FB;color:#0C447C}
+.pill-school{background:#EAF3DE;color:#27500A}
+.pill-train{background:#FAECE7;color:#712B13}
+.pill-admin{background:#F1EFE8;color:#444441}
+.pill-reset{background:#FAEEDA;color:#633806}
+.block-desc{font-size:13px;color:var(--text);flex:1;margin-top:4px}
+.energy-bar{display:flex;gap:4px;margin-bottom:12px}
+.energy-seg{height:6px;border-radius:3px;flex:1}
+.e-low{background:#D3D1C7}.e-mid{background:#FAC775}.e-high{background:#5DCAA5}
+.e-legend{display:flex;gap:12px;margin-bottom:14px}
+.e-legend span{font-size:11px;color:var(--text2);display:flex;align-items:center;gap:4px}
+.e-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.tip-box{background:var(--bg2);border-radius:var(--radius);padding:10px 12px;margin-top:12px;font-size:12px;color:var(--text2)}
+.tip-box strong{color:var(--text);font-weight:500}
+.sec-label{font-size:11px;font-weight:500;color:var(--text3);letter-spacing:.05em;text-transform:uppercase;margin-bottom:8px;margin-top:14px}
+.sec-label:first-child{margin-top:0}
+
+/* REVISÃO */
+.review-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.review-num{width:22px;height:22px;border-radius:50%;background:#EEEDFE;color:#3C3489;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.review-text{font-size:13px;color:var(--text)}
+.review-sub{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* ÁLGEBRA */
+.book-icon{width:38px;height:38px;border-radius:var(--radius);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;flex-shrink:0}
+.pace-badge{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:500;white-space:nowrap}
+.concept-block{margin-bottom:14px}
+.concept-name{font-size:13px;font-weight:500;color:var(--text);margin-bottom:4px}
+.concept-exp{font-size:13px;color:var(--text2);line-height:1.6}
+.check-item{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px;cursor:pointer}
+.check-box{width:16px;height:16px;border:0.5px solid var(--border2);border-radius:4px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:background .15s}
+.check-box.done{background:var(--success-bg);border-color:var(--success-text)}
+.check-tick{font-size:10px;color:var(--success-text);display:none}
+.check-box.done .check-tick{display:block}
+.check-text{font-size:13px;color:var(--text);line-height:1.5}
+.check-text.done{color:var(--text2);text-decoration:line-through}
+.analogy-box{background:var(--bg2);border-radius:var(--radius);padding:12px;margin-top:14px}
+.analogy-label{font-size:11px;color:var(--text3);margin-bottom:4px;font-weight:500}
+.analogy-text{font-size:13px;color:var(--text2);line-height:1.6}
+.prog-bar{height:4px;background:var(--border);border-radius:2px;overflow:hidden;margin-top:8px}
+.prog-fill{height:100%;border-radius:2px;transition:width .3s}
+.prog-label{font-size:11px;color:var(--text3);margin-top:4px}
+.key-box{padding:10px 12px;margin-top:12px;border-left:2px solid}
+.key-label{font-size:11px;font-weight:500;margin-bottom:4px}
+.key-text{font-size:13px;line-height:1.6}
+
+/* META CARDS */
+.meta-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.5rem}
+.meta-card{background:var(--bg);border:0.5px solid var(--border);border-radius:var(--radius);padding:12px}
+.meta-label{font-size:11px;color:var(--text3);margin-bottom:4px}
+.meta-val{font-size:20px;font-weight:500;color:var(--text)}
+.meta-sub{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* SUPLEMENTOS */
+.supp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:12px}
+.supp-card{background:var(--bg2);border-radius:var(--radius);padding:12px}
 </style>
+</head>
+<body>
 
-<h2 class="sr-only">Plano semanal interativo de segunda a sexta com blocos de tempo, treinos, suplementação e revisão semanal</h2>
+<nav>
+  <div class="nav-logo">Central</div>
+  <button class="nav-btn active" onclick="showPage('semana',this)">Semana</button>
+  <button class="nav-btn" onclick="showPage('algebra',this)">Álgebra</button>
+</nav>
 
-<div class="tabs">
-  <button class="tab active" onclick="switchTab('semana')">Semana</button>
-  <button class="tab" onclick="switchTab('suplementos')">Suplementos</button>
-  <button class="tab" onclick="switchTab('revisao')">Revisão semanal</button>
-</div>
+<main>
 
-<div class="tab-content active" id="tab-semana">
+<!-- ===== PÁGINA: PLANO SEMANAL ===== -->
+<div class="page active" id="page-semana">
 
-<div class="e-legend">
-  <span><span class="e-dot" style="background:#D3D1C7"></span>Baixa energia</span>
-  <span><span class="e-dot" style="background:#FAC775"></span>Média</span>
-  <span><span class="e-dot" style="background:#5DCAA5"></span>Pico de foco</span>
-</div>
-
-<div class="week" id="days-container"></div>
-</div>
-
-<div class="tab-content" id="tab-suplementos">
-  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:12px;">
-    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;">
-      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px;">Com café da manhã</div>
-      <div style="font-size:13px;color:var(--color-text-primary);font-weight:500;">Multivitamínico</div>
-      <div style="font-size:12px;color:var(--color-text-secondary);">+ Zinco + Ômega 3</div>
-    </div>
-    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;">
-      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px;">Pré ou pós-treino</div>
-      <div style="font-size:13px;color:var(--color-text-primary);font-weight:500;">Creatina 3–5g</div>
-      <div style="font-size:12px;color:var(--color-text-secondary);">Qualquer horário fixo</div>
-    </div>
-    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;">
-      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px;">Meta diária</div>
-      <div style="font-size:13px;color:var(--color-text-primary);font-weight:500;">6–8 ovos</div>
-      <div style="font-size:12px;color:var(--color-text-secondary);">+ 2g/kg proteína total</div>
-    </div>
-    <div style="background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px;">
-      <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:4px;">Transporte diário</div>
-      <div style="font-size:13px;color:var(--color-text-primary);font-weight:500;">Bike 20–30km</div>
-      <div style="font-size:12px;color:var(--color-text-secondary);">Cardio passivo incluso</div>
-    </div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('dias',this,'semana-tabs')">Dias</button>
+    <button class="tab" onclick="switchTab('suplementos',this,'semana-tabs')">Suplementos</button>
+    <button class="tab" onclick="switchTab('revisao',this,'semana-tabs')">Revisão</button>
   </div>
-  <div class="tip-box"><strong>Dica:</strong> Ômega 3 com gordura (ovo, abacate) aumenta absorção. Zinco longe de cálcio. Creatina: consistência diária > horário.</div>
-</div>
 
-<div class="tab-content" id="tab-revisao">
-  <div class="review-card">
-    <div class="review-title">Revisão semanal — domingo (15 min)</div>
-    <div class="review-item"><div class="review-num">1</div><div><div class="review-text">O que funcionou bem?</div><div class="review-sub">Blocos que respeitei, treinos feitos, capítulos de Gelfand concluídos</div></div></div>
-    <div class="review-item"><div class="review-num">2</div><div><div class="review-text">O que travou?</div><div class="review-sub">Onde perdi tempo, onde errei a estimativa, o que pulei</div></div></div>
-    <div class="review-item"><div class="review-num">3</div><div><div class="review-text">Gargalo da semana</div><div class="review-sub">1 único padrão que, se resolvido, melhora tudo</div></div></div>
-    <div class="review-item"><div class="review-num">4</div><div><div class="review-text">Ajuste para próxima semana</div><div class="review-sub">Máximo 1 mudança de processo. Simples e testável</div></div></div>
-    <div class="review-item"><div class="review-num">5</div><div><div class="review-text">Status Gelfand</div><div class="review-sub">Capítulo atual, exercícios pendentes, dúvidas para pesquisar</div></div></div>
-    <div class="tip-box" style="margin-top:0;"><strong>Regra:</strong> Se a revisão durar mais de 20 min, você está analisando demais. O objetivo é decidir, não ruminar.</div>
+  <div id="semana-tabs">
+
+    <div class="tab-content active" id="tab-dias">
+      <div class="e-legend">
+        <span><span class="e-dot" style="background:#D3D1C7"></span>Baixa energia</span>
+        <span><span class="e-dot" style="background:#FAC775"></span>Média</span>
+        <span><span class="e-dot" style="background:#5DCAA5"></span>Pico de foco</span>
+      </div>
+      <div id="days-container"></div>
+    </div>
+
+    <div class="tab-content" id="tab-suplementos">
+      <div class="supp-grid">
+        <div class="supp-card"><div class="meta-label">Com café da manhã</div><div style="font-size:13px;font-weight:500;color:var(--text)">Multivitamínico</div><div style="font-size:12px;color:var(--text2)">+ Zinco + Ômega 3</div></div>
+        <div class="supp-card"><div class="meta-label">Pré ou pós-treino</div><div style="font-size:13px;font-weight:500;color:var(--text)">Creatina 3–5g</div><div style="font-size:12px;color:var(--text2)">Qualquer horário fixo</div></div>
+        <div class="supp-card"><div class="meta-label">Meta diária</div><div style="font-size:13px;font-weight:500;color:var(--text)">6–8 ovos</div><div style="font-size:12px;color:var(--text2)">+ 2g/kg proteína total</div></div>
+        <div class="supp-card"><div class="meta-label">Transporte diário</div><div style="font-size:13px;font-weight:500;color:var(--text)">Bike 20–30km</div><div style="font-size:12px;color:var(--text2)">Cardio passivo incluso</div></div>
+      </div>
+      <div class="tip-box"><strong>Dica:</strong> Ômega 3 com gordura (ovo, abacate) aumenta absorção. Zinco longe de cálcio. Creatina: consistência diária > horário.</div>
+    </div>
+
+    <div class="tab-content" id="tab-revisao">
+      <div class="card" style="overflow:visible">
+        <div style="padding:16px">
+          <div style="font-size:15px;font-weight:500;color:var(--text);margin-bottom:12px">Revisão semanal — domingo (15 min)</div>
+          <div class="review-item"><div class="review-num">1</div><div><div class="review-text">O que funcionou bem?</div><div class="review-sub">Blocos que respeitei, treinos feitos, capítulos de Gelfand concluídos</div></div></div>
+          <div class="review-item"><div class="review-num">2</div><div><div class="review-text">O que travou?</div><div class="review-sub">Onde perdi tempo, onde errei a estimativa, o que pulei</div></div></div>
+          <div class="review-item"><div class="review-num">3</div><div><div class="review-text">Gargalo da semana</div><div class="review-sub">1 único padrão que, se resolvido, melhora tudo</div></div></div>
+          <div class="review-item"><div class="review-num">4</div><div><div class="review-text">Ajuste para próxima semana</div><div class="review-sub">Máximo 1 mudança de processo. Simples e testável</div></div></div>
+          <div class="review-item"><div class="review-num">5</div><div><div class="review-text">Status Gelfand</div><div class="review-sub">Capítulo atual, exercícios pendentes, dúvidas para pesquisar</div></div></div>
+          <div class="tip-box"><strong>Regra:</strong> Se a revisão durar mais de 20 min, você está analisando demais.</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
+
+<!-- ===== PÁGINA: ÁLGEBRA ===== -->
+<div class="page" id="page-algebra">
+  <div class="meta-grid">
+    <div class="meta-card"><div class="meta-label">Duração total</div><div class="meta-val">~13</div><div class="meta-sub">meses contínuos</div></div>
+    <div class="meta-card"><div class="meta-label">Páginas totais</div><div class="meta-val">2.630</div><div class="meta-sub">somando os 6 livros</div></div>
+    <div class="meta-card"><div class="meta-label">Condição</div><div class="meta-val">Diário</div><div class="meta-sub">ritmo de prova formal</div></div>
+    <div class="meta-card"><div class="meta-label">Livros</div><div class="meta-val">6</div><div class="meta-sub">do elementar ao avançado</div></div>
+  </div>
+  <div id="books-container"></div>
+</div>
+
+</main>
 
 <script>
+// ── NAVEGAÇÃO ──
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+function switchTab(id, btn, groupId) {
+  const group = document.getElementById(groupId);
+  group.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  btn.closest('.tabs').querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── PLANO SEMANAL ──
 const days = [
   {
-    name: "Segunda-feira",
-    outcome: "Iniciar Gelfand com foco total + Força",
-    color: "#E6F1FB", textColor: "#0C447C",
-    emoji: "S",
-    emojiDark: "#378ADD",
-    blocks: [
-      { time: "6h00", type: "admin", label: "Rotina", desc: "Acorda, café, ovos (2-3), suplementos", energy: "low" },
-      { time: "6h30–7h20", type: "bike", label: "Deslocamento", desc: "Bike para escola (20–30km)", energy: "low" },
-      { time: "7h30–12h", type: "school", label: "Escola", desc: "Aulas — modo passivo/ativo", energy: "mid" },
-      { time: "13h–14h30", type: "deepwork", label: "Gelfand", desc: "Bloco 1: Leitura + exercícios (50 min) → pausa 10 min → 30 min resolução", energy: "high" },
-      { time: "14h30–15h", type: "reset", label: "Buffer", desc: "Lanche proteico, revisão rápida das dúvidas", energy: "mid" },
-      { time: "15h–16h", type: "school", label: "Escola", desc: "Bloco de estudo escolar (50 min)", energy: "high" },
-      { time: "17h–19h", type: "train", label: "Força", desc: "Agachamento 3×6-12 / Supino 3×6-12 / Terra 3×6-12", energy: "mid" },
-      { time: "19h30–20h", type: "admin", label: "Alimentação", desc: "Refeição principal, proteína, ovos restantes", energy: "low" },
-      { time: "22h–23h", type: "reset", label: "Sono", desc: "Sem tela 30 min antes — alvo: 8h de sono", energy: "low" },
+    name:"Segunda-feira",outcome:"Iniciar Gelfand com foco total + Força",
+    color:"#E6F1FB",textColor:"#0C447C",emoji:"S",
+    blocks:[
+      {time:"6h00",type:"admin",desc:"Acorda, café, ovos (2-3), suplementos",energy:"low"},
+      {time:"6h30–7h20",type:"admin",desc:"Bike para escola (20–30km)",energy:"low"},
+      {time:"7h30–12h",type:"school",desc:"Aulas — modo passivo/ativo",energy:"mid"},
+      {time:"13h–14h30",type:"deepwork",desc:"Gelfand: Leitura + exercícios (50 min) → pausa 10 min → 30 min resolução",energy:"high"},
+      {time:"14h30–15h",type:"reset",desc:"Lanche proteico, revisão rápida das dúvidas",energy:"mid"},
+      {time:"15h–16h",type:"school",desc:"Bloco de estudo escolar (50 min)",energy:"high"},
+      {time:"17h–19h",type:"train",desc:"Agachamento 3×6-12 / Supino 3×6-12 / Terra 3×6-12",energy:"mid"},
+      {time:"19h30–20h",type:"admin",desc:"Refeição principal, proteína, ovos restantes",energy:"low"},
+      {time:"22h–23h",type:"reset",desc:"Sem tela 30 min antes — alvo: 8h de sono",energy:"low"},
     ],
-    tip: "Segunda é o dia de entrada. Priorize Gelfand enquanto o cérebro está descansado."
+    tip:"Segunda é o dia de entrada. Priorize Gelfand enquanto o cérebro está descansado."
   },
   {
-    name: "Terça-feira",
-    outcome: "Avançar em Gelfand + Escola + Basquete",
-    color: "#E1F5EE", textColor: "#085041",
-    emoji: "T",
-    emojiDark: "#1D9E75",
-    blocks: [
-      { time: "6h–7h20", type: "admin", label: "Rotina + Bike", desc: "Café, ovos, suplementos + deslocamento", energy: "low" },
-      { time: "7h30–12h", type: "school", label: "Escola", desc: "Aulas do dia", energy: "mid" },
-      { time: "13h–14h30", type: "deepwork", label: "Gelfand", desc: "Bloco 2: Continuar exercícios do dia anterior + novos (50 min + revisão)", energy: "high" },
-      { time: "14h30–15h30", type: "school", label: "Escola", desc: "Bloco escolar 50 min — matéria mais difícil da semana", energy: "high" },
-      { time: "15h30–16h", type: "reset", label: "Buffer", desc: "Lanche, revisão das tarefas abertas", energy: "mid" },
-      { time: "17h–19h30", type: "train", label: "Basquete", desc: "Behind the back / Jump shot / Euro step — até cansar com qualidade", energy: "mid" },
-      { time: "20h–22h", type: "admin", label: "Recuperação", desc: "Janta proteica, banho, relaxar sem telas", energy: "low" },
+    name:"Terça-feira",outcome:"Avançar em Gelfand + Escola + Basquete",
+    color:"#E1F5EE",textColor:"#085041",emoji:"T",
+    blocks:[
+      {time:"6h–7h20",type:"admin",desc:"Café, ovos, suplementos + deslocamento bike",energy:"low"},
+      {time:"7h30–12h",type:"school",desc:"Aulas do dia",energy:"mid"},
+      {time:"13h–14h30",type:"deepwork",desc:"Gelfand: Continuar exercícios do dia anterior + novos (50 min + revisão)",energy:"high"},
+      {time:"14h30–15h30",type:"school",desc:"Bloco escolar 50 min — matéria mais difícil da semana",energy:"high"},
+      {time:"15h30–16h",type:"reset",desc:"Lanche, revisão das tarefas abertas",energy:"mid"},
+      {time:"17h–19h30",type:"train",desc:"Basquete: Behind the back / Jump shot / Euro step — até cansar com qualidade",energy:"mid"},
+      {time:"20h–22h",type:"admin",desc:"Janta proteica, banho, relaxar sem telas",energy:"low"},
     ],
-    tip: "Terça é dia duplo (Gelfand + escola). Não adicione mais nada — o basquete já é intenso."
+    tip:"Terça é dia duplo (Gelfand + escola). Não adicione mais nada — o basquete já é intenso."
   },
   {
-    name: "Quarta-feira",
-    outcome: "Consolidar Gelfand + 2º treino de força",
-    color: "#FAECE7", textColor: "#712B13",
-    emoji: "Q",
-    emojiDark: "#D85A30",
-    blocks: [
-      { time: "6h–7h20", type: "admin", label: "Rotina + Bike", desc: "Café, ovos, suplementos + deslocamento", energy: "low" },
-      { time: "7h30–12h", type: "school", label: "Escola", desc: "Aulas", energy: "mid" },
-      { time: "13h–13h50", type: "deepwork", label: "Gelfand", desc: "Bloco de revisão: refazer exercícios errados, consolidar conceitos", energy: "high" },
-      { time: "14h–15h", type: "school", label: "Escola", desc: "Bloco escolar — tarefa ou revisão de matéria", energy: "high" },
-      { time: "15h–15h30", type: "reset", label: "Buffer", desc: "Buffer de 30 min para o inesperado", energy: "mid" },
-      { time: "17h–19h", type: "train", label: "Força", desc: "Agachamento / Supino / Terra — mesmo protocolo 3×6-12", energy: "mid" },
-      { time: "19h30–22h", type: "admin", label: "Noite livre", desc: "Janta, descanso ativo, preparo para quinta", energy: "low" },
+    name:"Quarta-feira",outcome:"Consolidar Gelfand + 2º treino de força",
+    color:"#FAECE7",textColor:"#712B13",emoji:"Q",
+    blocks:[
+      {time:"6h–7h20",type:"admin",desc:"Café, ovos, suplementos + deslocamento",energy:"low"},
+      {time:"7h30–12h",type:"school",desc:"Aulas",energy:"mid"},
+      {time:"13h–13h50",type:"deepwork",desc:"Gelfand: refazer exercícios errados, consolidar conceitos",energy:"high"},
+      {time:"14h–15h",type:"school",desc:"Bloco escolar — tarefa ou revisão de matéria",energy:"high"},
+      {time:"15h–15h30",type:"reset",desc:"Buffer de 30 min para o inesperado",energy:"mid"},
+      {time:"17h–19h",type:"train",desc:"Agachamento / Supino / Terra — mesmo protocolo 3×6-12",energy:"mid"},
+      {time:"19h30–22h",type:"admin",desc:"Janta, descanso ativo, preparo para quinta",energy:"low"},
     ],
-    tip: "Quarta é o meio da semana. Use o bloco Gelfand para revisar, não avançar — solidifica mais."
+    tip:"Quarta é o meio da semana. Use o bloco Gelfand para revisar, não avançar — solidifica mais."
   },
   {
-    name: "Quinta-feira",
-    outcome: "Avançar capítulo Gelfand + escola em dia",
-    color: "#FAEEDA", textColor: "#633806",
-    emoji: "Q",
-    emojiDark: "#BA7517",
-    blocks: [
-      { time: "6h–7h20", type: "admin", label: "Rotina + Bike", desc: "Café, ovos, suplementos + deslocamento", energy: "low" },
-      { time: "7h30–12h", type: "school", label: "Escola", desc: "Aulas", energy: "mid" },
-      { time: "13h–14h30", type: "deepwork", label: "Gelfand", desc: "Bloco 50 min: avançar novo trecho + 30 min exercícios novos", energy: "high" },
-      { time: "14h30–15h30", type: "school", label: "Escola", desc: "Bloco escolar — provas futuras, revisão ou tarefa", energy: "high" },
-      { time: "15h30–17h", type: "reset", label: "Buffer / Admin", desc: "Buffer, lanche, organizar o que falta pra sexta", energy: "mid" },
-      { time: "17h–19h", type: "train", label: "Basquete (opcional)", desc: "Sessão leve ou descanso ativo — ouça o corpo após terça", energy: "mid" },
-      { time: "20h+", type: "admin", label: "Noite", desc: "Janta, relaxar, dormir no horário", energy: "low" },
+    name:"Quinta-feira",outcome:"Avançar capítulo Gelfand + escola em dia",
+    color:"#FAEEDA",textColor:"#633806",emoji:"Q",
+    blocks:[
+      {time:"6h–7h20",type:"admin",desc:"Café, ovos, suplementos + deslocamento",energy:"low"},
+      {time:"7h30–12h",type:"school",desc:"Aulas",energy:"mid"},
+      {time:"13h–14h30",type:"deepwork",desc:"Gelfand: avançar novo trecho + 30 min exercícios novos",energy:"high"},
+      {time:"14h30–15h30",type:"school",desc:"Bloco escolar — provas futuras, revisão ou tarefa",energy:"high"},
+      {time:"15h30–17h",type:"reset",desc:"Buffer, lanche, organizar o que falta pra sexta",energy:"mid"},
+      {time:"17h–19h",type:"train",desc:"Basquete leve ou descanso ativo — ouça o corpo após terça",energy:"mid"},
+      {time:"20h+",type:"admin",desc:"Janta, relaxar, dormir no horário",energy:"low"},
     ],
-    tip: "Quinta é o segundo pico de produção. Aproveite o bloco da tarde para Gelfand difícil."
+    tip:"Quinta é o segundo pico de produção. Aproveite o bloco da tarde para Gelfand difícil."
   },
   {
-    name: "Sexta-feira",
-    outcome: "Fechar a semana — Força + revisão Gelfand",
-    color: "#EEEDFE", textColor: "#3C3489",
-    emoji: "S",
-    emojiDark: "#7F77DD",
-    blocks: [
-      { time: "6h–7h20", type: "admin", label: "Rotina + Bike", desc: "Café, ovos, suplementos + deslocamento", energy: "low" },
-      { time: "7h30–12h", type: "school", label: "Escola", desc: "Aulas — último dia da semana escolar", energy: "mid" },
-      { time: "13h–13h50", type: "deepwork", label: "Gelfand", desc: "Bloco de encerramento: o que falta da semana? Marcar ponto de parada claro", energy: "high" },
-      { time: "14h–15h", type: "school", label: "Escola", desc: "Bloco escolar — fechar tarefas pendentes", energy: "high" },
-      { time: "15h–15h30", type: "reset", label: "Reset semanal", desc: "10 min: o que fiz? O que fica pra semana que vem?", energy: "mid" },
-      { time: "17h–19h", type: "train", label: "Força", desc: "3° treino de força — fecha o ciclo Seg/Qua/Sex", energy: "mid" },
-      { time: "19h30+", type: "admin", label: "Fim de semana", desc: "Janta, atividade social, descanso — sem culpa", energy: "low" },
+    name:"Sexta-feira",outcome:"Fechar a semana — Força + revisão Gelfand",
+    color:"#EEEDFE",textColor:"#3C3489",emoji:"S",
+    blocks:[
+      {time:"6h–7h20",type:"admin",desc:"Café, ovos, suplementos + deslocamento",energy:"low"},
+      {time:"7h30–12h",type:"school",desc:"Aulas — último dia da semana escolar",energy:"mid"},
+      {time:"13h–13h50",type:"deepwork",desc:"Gelfand: encerramento — marcar ponto de parada claro",energy:"high"},
+      {time:"14h–15h",type:"school",desc:"Bloco escolar — fechar tarefas pendentes",energy:"high"},
+      {time:"15h–15h30",type:"reset",desc:"10 min: o que fiz? O que fica pra semana que vem?",energy:"mid"},
+      {time:"17h–19h",type:"train",desc:"3º treino de força — fecha o ciclo Seg/Qua/Sex",energy:"mid"},
+      {time:"19h30+",type:"admin",desc:"Janta, atividade social, descanso — sem culpa",energy:"low"},
     ],
-    tip: "Sexta é para fechar ciclos, não abrir novos. Encerre o capítulo Gelfand ou marque o ponto de retomada."
+    tip:"Sexta é para fechar ciclos, não abrir novos."
   }
 ];
 
-const pillMap = {
-  deepwork: "pill-deepwork",
-  school: "pill-school",
-  train: "pill-train",
-  admin: "pill-admin",
-  reset: "pill-reset",
-  bike: "pill-admin",
-  supp: "pill-supp"
-};
-const labelMap = {
-  deepwork: "Foco profundo",
-  school: "Escola",
-  train: "Treino",
-  admin: "Rotina",
-  reset: "Reset",
-  bike: "Bike",
-  supp: "Suplemento"
-};
+const pillMap={deepwork:"pill-deepwork",school:"pill-school",train:"pill-train",admin:"pill-admin",reset:"pill-reset"};
+const labelMap={deepwork:"Foco profundo",school:"Escola",train:"Treino",admin:"Rotina",reset:"Reset"};
 
-function energyBar(blocks) {
-  const segs = blocks.map(b => {
-    const cls = b.energy === "high" ? "e-high" : b.energy === "mid" ? "e-mid" : "e-low";
-    return `<div class="energy-seg ${cls}"></div>`;
-  }).join("");
-  return `<div class="energy-bar">${segs}</div>`;
-}
-
-const container = document.getElementById("days-container");
-days.forEach((day, i) => {
-  const card = document.createElement("div");
-  card.className = "day-card";
-
-  const blocksHtml = day.blocks.map(b => `
-    <div class="block">
-      <div class="block-time">${b.time}</div>
-      <div style="flex:1">
-        <span class="block-pill ${pillMap[b.type]}">${labelMap[b.type]}</span>
-        <div class="block-desc" style="margin-top:4px;">${b.desc}</div>
-      </div>
-    </div>
-  `).join("");
-
+const dc = document.getElementById('days-container');
+days.forEach((day,i) => {
+  const segs = day.blocks.map(b=>`<div class="energy-seg ${b.energy==='high'?'e-high':b.energy==='mid'?'e-mid':'e-low'}"></div>`).join('');
+  const blocksHtml = day.blocks.map(b=>`<div class="block"><div class="block-time">${b.time}</div><div style="flex:1"><span class="block-pill ${pillMap[b.type]||'pill-admin'}">${labelMap[b.type]||'Rotina'}</span><div class="block-desc">${b.desc}</div></div></div>`).join('');
+  const card = document.createElement('div');
+  card.className = 'card';
   card.innerHTML = `
-    <div class="day-header" onclick="toggle(${i})">
-      <div class="day-left">
-        <div class="day-badge" style="background:${day.color};color:${day.textColor};">${day.emoji}</div>
-        <div>
-          <div class="day-name">${day.name}</div>
-          <div class="day-outcome">${day.outcome}</div>
-        </div>
+    <div class="card-header" onclick="toggleCard('day${i}')">
+      <div style="display:flex;align-items:center;gap:10px">
+        <div class="day-badge" style="background:${day.color};color:${day.textColor}">${day.emoji}</div>
+        <div><div class="day-name">${day.name}</div><div class="day-outcome">${day.outcome}</div></div>
       </div>
-      <span class="chevron" id="chev-${i}">▼</span>
+      <span class="chev" id="chev-day${i}">▼</span>
     </div>
-    <div class="day-body" id="body-${i}">
-      <div class="section-label">Nível de energia ao longo do dia</div>
-      ${energyBar(day.blocks)}
-      <div class="section-label">Blocos do dia</div>
+    <div class="card-body" id="body-day${i}">
+      <div class="sec-label">Energia ao longo do dia</div>
+      <div class="energy-bar">${segs}</div>
+      <div class="sec-label">Blocos</div>
       ${blocksHtml}
       <div class="tip-box"><strong>Foco do dia:</strong> ${day.tip}</div>
-    </div>
-  `;
-  container.appendChild(card);
+    </div>`;
+  dc.appendChild(card);
 });
 
-function toggle(i) {
-  const body = document.getElementById("body-" + i);
-  const chev = document.getElementById("chev-" + i);
-  body.classList.toggle("open");
-  chev.classList.toggle("open");
+// ── ÁLGEBRA ──
+const books = [
+  {
+    title:"Álgebra — Israel Gelfand",author:"Gelfand",pages:160,pace:18,
+    level:"Fundação",iconBg:"#E6F1FB",iconColor:"#0C447C",
+    badgeBg:"#E6F1FB",badgeColor:"#0C447C",accent:"#378ADD",
+    analogy:"É como aprender a andar antes de correr. Gelfand não ensina truques — ele te força a pensar no que número, operação e padrão realmente significam.",
+    keyTakeaway:"Dominar Gelfand significa que você parou de computar e começou a raciocinar. É o pré-requisito silencioso para tudo que vem depois.",
+    keyBg:"#E6F1FB",keyBorder:"#378ADD",keyTc:"#0C447C",
+    concepts:[
+      {name:"Definições formais",exp:"Reescrever uma definição formalmente significa expressá-la em linguagem matemática precisa. Exemplo: 'número par' vira 'n ∈ ℤ tal que n = 2k para algum k ∈ ℤ'."},
+      {name:"Provar sem consultar",exp:"O critério real de domínio: fechar o livro e reconstruir a prova do zero. Se você precisa olhar, ainda não entendeu — memorizou."},
+      {name:"Exemplos e contraexemplos",exp:"Um contraexemplo derruba um teorema falso com um único caso. Construir contraexemplos mostra que você entende os limites de cada resultado."},
+    ],
+    checks:["Reescrevi formalmente todas as definições centrais","Provei, sem consultar, os teoremas principais de cada capítulo","Resolvi exercícios conceituais (não apenas algorítmicos)","Consigo explicar espaço vetorial, base e dimensão com rigor","Consigo construir exemplos e contraexemplos por conta própria"]
+  },
+  {
+    title:"Álgebra Linear — Elon Lages Lima",author:"Elon Lima",pages:430,pace:13,
+    level:"Intermediário",iconBg:"#E1F5EE",iconColor:"#085041",
+    badgeBg:"#E1F5EE",badgeColor:"#085041",accent:"#1D9E75",
+    analogy:"Elon Lima é o padrão brasileiro de rigor. Ele exige que você prove cada passo — não aceita 'é óbvio'.",
+    keyTakeaway:"Após Elon, você deve conseguir provar o teorema da dimensão de cabeça e justificar cada etapa de uma diagonalização sem hesitar.",
+    keyBg:"#E1F5EE",keyBorder:"#1D9E75",keyTc:"#085041",
+    concepts:[
+      {name:"Independência linear, base e dimensão",exp:"Vetores são LI se nenhum é combinação linear dos outros. Base = conjunto LI que gera o espaço. Dimensão = número de vetores na base."},
+      {name:"Teorema da dimensão",exp:"dim(Im T) + dim(Ker T) = dim(domínio). O quanto uma transformação 'perde' mais o quanto ela 'produz' é sempre igual ao tamanho do espaço original."},
+      {name:"Diagonalização",exp:"Encontrar uma base em que a matriz do operador é diagonal. Exige autovalores (det(A − λI) = 0) e autovetores associados."},
+    ],
+    checks:["Provo independência linear, base e dimensão sem hesitar","Domino soma direta, projeções e decomposições","Provo o teorema da dimensão e suas consequências","Diagonalizo operadores e justifico cada passo formalmente","Resolvi uma quantidade substancial de exercícios teóricos"]
+  },
+  {
+    title:"Abstract Algebra — Dummit & Foote",author:"Dummit",pages:950,pace:10,
+    level:"Avançado",iconBg:"#FAECE7",iconColor:"#712B13",
+    badgeBg:"#FAECE7",badgeColor:"#712B13",accent:"#D85A30",
+    analogy:"D&F é a bíblia da álgebra abstrata. É extenso de propósito — cobre grupos, anéis e corpos com profundidade enciclopédica.",
+    keyTakeaway:"Após D&F, grupos, anéis e corpos deixam de ser objetos separados e passam a ser instâncias de um mesmo padrão: conjunto + operação(ões) + axiomas.",
+    keyBg:"#FAECE7",keyBorder:"#D85A30",keyTc:"#712B13",
+    concepts:[
+      {name:"Homomorfismos",exp:"Função que preserva estrutura: φ(ab) = φ(a)φ(b). O núcleo (ker φ) e a imagem (Im φ) revelam o quanto a estrutura é preservada ou perdida."},
+      {name:"Teoremas do isomorfismo",exp:"1° teorema: G/ker(φ) ≅ Im(φ). Quocientar pelo núcleo torna o homomorfismo injetor. Conecta subgrupos normais e quocientes."},
+      {name:"PID, UFD e F[x]",exp:"PID: todo ideal é gerado por um elemento. UFD: fatoração única em irredutíveis. F[x] sobre corpo F é sempre PID e UFD."},
+    ],
+    checks:["Provo resultados clássicos de grupos finitos","Domino homomorfismos, quocientes e teoremas do isomorfismo","Trabalho com anéis, ideais, PID, UFD com segurança","Provo propriedades de F[x] quando F é corpo","Resolvi exercícios estruturais de todos os capítulos"]
+  },
+  {
+    title:"Linear Algebra Done Right — Axler",author:"Axler",pages:340,pace:11,
+    level:"Avançado",iconBg:"#EEEDFE",iconColor:"#3C3489",
+    badgeBg:"#EEEDFE",badgeColor:"#3C3489",accent:"#7F77DD",
+    analogy:"Axler proíbe determinantes nos primeiros capítulos para forçar você a entender operadores pela estrutura, não por fórmulas.",
+    keyTakeaway:"Axler te ensina a ver operadores como objetos geométricos com estrutura própria, não como matrizes cheias de números.",
+    keyBg:"#EEEDFE",keyBorder:"#7F77DD",keyTc:"#3C3489",
+    concepts:[
+      {name:"Operadores sem determinantes",exp:"Axler prova autovalores usando invariância de subespaços, não det(A − λI) = 0. Autovalores são propriedades intrínsecas do operador."},
+      {name:"Teorema espectral",exp:"Operadores normais (espaços complexos) ou auto-adjuntos (reais) são diagonalizáveis em bases ortonormais. O resultado mais importante da álgebra linear aplicada."},
+      {name:"Espaços quocientes e dualidade",exp:"V/U é o espaço de classes de equivalência módulo U. O dual V* = L(V, F) consiste nos funcionais lineares — funções que mapeiam vetores em escalares."},
+    ],
+    checks:["Entendo operadores sem recorrer a determinantes","Provo resultados espectrais com naturalidade","Domino espaços quocientes e dualidade","Reconheço a forma estrutural por trás da álgebra linear"]
+  },
+  {
+    title:"Algebra — Serge Lang",author:"Lang",pages:600,pace:7,
+    level:"Grad. avançada",iconBg:"#FAEEDA",iconColor:"#633806",
+    badgeBg:"#FAEEDA",badgeColor:"#633806",accent:"#BA7517",
+    analogy:"Lang é conciso ao extremo — cada linha carrega peso. Diferente de D&F, ele não segura sua mão.",
+    keyTakeaway:"Lang conecta grupos, anéis e corpos em uma narrativa única. Teoria de Galois, módulos e extensões de corpos são facetas do mesmo objeto.",
+    keyBg:"#FAEEDA",keyBorder:"#BA7517",keyTc:"#633806",
+    concepts:[
+      {name:"Teoria de Galois",exp:"Associa a cada extensão E/F um grupo Gal(E/F) de automorfismos. A correspondência de Galois bijecta subgrupos de Gal(E/F) com subcorpos de E contendo F."},
+      {name:"Extensões algébricas",exp:"α é algébrico sobre F se satisfaz um polinômio com coeficientes em F. Caso contrário é transcendente (como π e e sobre ℚ)."},
+      {name:"Módulos",exp:"Generalização de espaço vetorial onde o corpo é substituído por um anel. Nem todo módulo tem base — diferente de espaços vetoriais."},
+    ],
+    checks:["Provo resultados de Galois sem consultar","Entendo extensões algébricas e transcendentais","Trabalho com módulos com fluidez","Conecto grupos, anéis e corpos em uma estrutura única"]
+  },
+  {
+    title:"Commutative Algebra — Atiyah & Macdonald",author:"Atiyah",pages:150,pace:5,
+    level:"Pós-graduação",iconBg:"#F1EFE8",iconColor:"#444441",
+    badgeBg:"#F1EFE8",badgeColor:"#444441",accent:"#888780",
+    analogy:"AM tem 150 páginas mas é o livro mais denso da trilha. Os exercícios não são opcionais — metade do conteúdo real está neles.",
+    keyTakeaway:"AM é a porta de entrada para geometria algébrica. Após ele, você consegue ler papers de álgebra sem travar em definições.",
+    keyBg:"#F1EFE8",keyBorder:"#888780",keyTc:"#444441",
+    concepts:[
+      {name:"Ideais primos e maximais",exp:"Ideal primo P: se ab ∈ P então a ∈ P ou b ∈ P. Ideal maximal M: não existe ideal entre M e o anel todo. O espectro Spec(A) é central na geometria algébrica."},
+      {name:"Localização",exp:"Localizar A em S força elementos de S a serem invertíveis: S⁻¹A = {a/s : a ∈ A, s ∈ S}. Generalização algébrica de 'trabalhar com frações'."},
+      {name:"Noetherianidade e dim. de Krull",exp:"Noetheriano: toda cadeia crescente de ideais estabiliza. Dim. de Krull: cadeia mais longa de primos. Para k[x₁,...,xₙ], dim = n."},
+    ],
+    checks:["Domino ideais primos e maximais","Entendo localização formalmente","Compreendo Noetherianidade e dimensão de Krull","Consigo ler textos de álgebra algébrica sem travar"]
+  }
+];
+
+const checkState={};
+const bc = document.getElementById('books-container');
+books.forEach((b,i)=>{
+  const days_needed = Math.round(b.pages/b.pace);
+  const conceptsHtml = b.concepts.map(c=>`<div class="concept-block"><div class="concept-name">${c.name}</div><div class="concept-exp">${c.exp}</div></div>`).join('');
+  const checksHtml = b.checks.map((c,ci)=>`<div class="check-item" onclick="toggleCheck(${i},${ci})"><div class="check-box" id="cb-${i}-${ci}"><span class="check-tick">✓</span></div><div class="check-text" id="ct-${i}-${ci}">${c}</div></div>`).join('');
+  const card = document.createElement('div');
+  card.className='card';
+  card.innerHTML=`
+    <div class="card-header" onclick="toggleCard('book${i}')">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="book-icon" style="background:${b.iconBg};color:${b.iconColor}">${b.author.substring(0,2).toUpperCase()}</div>
+        <div><div class="day-name">${b.title}</div><div class="day-outcome">${b.pages} págs · ${days_needed} dias · ${b.level}</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="pace-badge" style="background:${b.badgeBg};color:${b.badgeColor}">${b.pace} pág/dia</span>
+        <span class="chev" id="chev-book${i}">▼</span>
+      </div>
+    </div>
+    <div class="card-body" id="body-book${i}">
+      <div class="prog-bar"><div class="prog-fill" id="prog-${i}" style="width:0%;background:${b.accent}"></div></div>
+      <div class="prog-label" id="prog-label-${i}">0 de ${b.checks.length} itens concluídos</div>
+      <div class="sec-label" style="margin-top:16px">Conceitos-chave</div>
+      ${conceptsHtml}
+      <div class="analogy-box"><div class="analogy-label">Como pensar neste livro</div><div class="analogy-text">${b.analogy}</div></div>
+      <div class="sec-label" style="margin-top:16px">Checklist de domínio</div>
+      ${checksHtml}
+      <div class="key-box" style="background:${b.keyBg};border-left-color:${b.keyBorder};border-radius:0">
+        <div class="key-label" style="color:${b.keyBorder}">Takeaway principal</div>
+        <div class="key-text" style="color:${b.keyTc}">${b.keyTakeaway}</div>
+      </div>
+    </div>`;
+  bc.appendChild(card);
+});
+
+function toggleCard(id){
+  const body=document.getElementById('body-'+id);
+  const chev=document.getElementById('chev-'+id);
+  body.classList.toggle('open');
+  chev.classList.toggle('open');
 }
 
-function switchTab(name) {
-  document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-  document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
-  event.target.classList.add("active");
-  document.getElementById("tab-" + name).classList.add("active");
+function toggleCheck(bi,ci){
+  const key=`${bi}-${ci}`;
+  checkState[key]=!checkState[key];
+  document.getElementById(`cb-${bi}-${ci}`).classList.toggle('done',checkState[key]);
+  document.getElementById(`ct-${bi}-${ci}`).classList.toggle('done',checkState[key]);
+  const book=books[bi];
+  let done=0;
+  book.checks.forEach((_,k)=>{if(checkState[`${bi}-${k}`])done++;});
+  const pct=Math.round(done/book.checks.length*100);
+  document.getElementById(`prog-${bi}`).style.width=pct+'%';
+  document.getElementById(`prog-label-${bi}`).textContent=`${done} de ${book.checks.length} itens concluídos`;
 }
 </script>
+</body>
+</html>
