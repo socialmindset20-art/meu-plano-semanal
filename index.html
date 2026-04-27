@@ -211,7 +211,7 @@ function switchTab(id, btn, groupId) {
 // ── PLANO SEMANAL ──
 const days = [
   {
-    name:"Segunda-feira",outcome:"Iniciar Gelfand com foco total + Força",
+    name:"Segunda-feira",outcome:"Gelfand puro — sem treino, foco total",
     color:"#E6F1FB",textColor:"#0C447C",emoji:"S",
     blocks:[
       {time:"6h00",type:"admin",desc:"Acorda, café, ovos (2-3), suplementos",energy:"low"},
@@ -220,16 +220,15 @@ const days = [
       {time:"13h–15h",type:"deepwork",desc:"Gelfand: Bloco 1 — leitura + exercícios (50 min) → pausa 10 min → 40 min resolução",energy:"high"},
       {time:"15h–15h20",type:"reset",desc:"Lanche proteico, revisão rápida das dúvidas",energy:"mid"},
       {time:"15h20–17h",type:"school",desc:"Estudo escolar — 2 blocos de 45 min com pausa",energy:"high"},
-      {time:"17h–17h30",type:"train",desc:"Força: Agachamento / Supino / Terra — 3×6-12 compacto",energy:"mid"},
-      {time:"17h30–19h",type:"deepwork",desc:"Gelfand: Bloco 2 — exercícios novos ou revisão do dia (90 min)",energy:"high"},
+      {time:"17h–19h",type:"deepwork",desc:"Gelfand: Bloco 2 — exercícios novos ou revisão do dia (2h sem treino hoje)",energy:"high"},
       {time:"19h–20h",type:"english",desc:"Inglês com Prof. Matheus — aula ao vivo",energy:"mid"},
       {time:"20h–20h30",type:"admin",desc:"Refeição principal, proteína, ovos restantes",energy:"low"},
       {time:"22h–23h",type:"reset",desc:"Sem tela 30 min antes — alvo: 8h de sono",energy:"low"},
     ],
-    tip:"Segunda é o dia de entrada. Priorize Gelfand enquanto o cérebro está descansado."
+    tip:"Segunda é dia de estudo puro. Sem treino — use o tempo extra para dominar Gelfand."
   },
   {
-    name:"Terça-feira",outcome:"Escola integral + Basquete à noite",
+    name:"Terça-feira",outcome:"Escola integral + Força à noite",
     color:"#E1F5EE",textColor:"#085041",emoji:"T",
     blocks:[
       {time:"6h–7h20",type:"admin",desc:"Café, ovos, suplementos + deslocamento bike",energy:"low"},
@@ -238,14 +237,14 @@ const days = [
       {time:"13h–15h25",type:"school",desc:"Aulas da tarde",energy:"mid"},
       {time:"15h25–15h50",type:"reset",desc:"Lanche na escola — proteína, fruta ou sanduíche",energy:"low"},
       {time:"15h50–18h",type:"school",desc:"Aulas finais do dia",energy:"mid"},
-      {time:"18h–18h40",type:"train",desc:"Basquete: Behind the back / Jump shot / Euro step — foco em qualidade, não quantidade",energy:"mid"},
-      {time:"18h40–19h",type:"reset",desc:"Banho, hidratação, transição para casa",energy:"low"},
+      {time:"18h–18h30",type:"train",desc:"Força: Agachamento / Supino / Terra — 3×6-12 compacto (30 min)",energy:"mid"},
+      {time:"18h30–19h",type:"reset",desc:"Banho, hidratação, transição para casa",energy:"low"},
       {time:"19h30–22h",type:"admin",desc:"Janta proteica em casa, relaxar sem telas",energy:"low"},
     ],
-    tip:"Terça é escola integral — basquete de 40 min é suficiente. Recuperação é parte do treino."
+    tip:"Terça é escola integral + força. Treino de 30 min direto ao sair da escola."
   },
   {
-    name:"Quarta-feira",outcome:"Consolidar Gelfand + 2º treino de força",
+    name:"Quarta-feira",outcome:"Gelfand + Basquete + Inglês",
     color:"#FAECE7",textColor:"#712B13",emoji:"Q",
     blocks:[
       {time:"6h–7h20",type:"admin",desc:"Café, ovos, suplementos + deslocamento",energy:"low"},
@@ -254,43 +253,72 @@ const days = [
       {time:"14h30–16h",type:"school",desc:"Estudo escolar — 2 blocos de 40 min com pausa",energy:"high"},
       {time:"16h–16h30",type:"reset",desc:"Buffer — lanche, ar livre, descanso",energy:"mid"},
       {time:"16h30–17h",type:"deepwork",desc:"Gelfand: revisão final rápida do dia (30 min)",energy:"high"},
-      {time:"17h–17h30",type:"train",desc:"Força: Agachamento / Supino / Terra — 3×6-12 compacto",energy:"mid"},
-      {time:"17h30–19h",type:"reset",desc:"Banho, lanche, transição tranquila antes do inglês",energy:"low"},
+      {time:"17h–17h40",type:"train",desc:"Basquete: Behind the back / Jump shot / Euro step (40 min)",energy:"mid"},
+      {time:"17h40–19h",type:"reset",desc:"Banho, lanche, transição tranquila antes do inglês",energy:"low"},
       {time:"19h–20h",type:"english",desc:"Inglês com Prof. Matheus — aula ao vivo",energy:"mid"},
       {time:"20h–22h",type:"admin",desc:"Janta, descanso ativo, preparo para quinta",energy:"low"},
     ],
-    tip:"Quarta é o meio da semana. Use o bloco Gelfand para revisar, não avançar — solidifica mais."
+    tip:"Quarta: Gelfand + basquete + inglês. Dia cheio — respeite os blocos e não adicione nada."
   },
   {
-    name:"Quinta-feira",outcome:"Avançar capítulo Gelfand + escola em dia",
+    name:"Quinta-feira",outcome:"Avançar Gelfand + Força",
     color:"#FAEEDA",textColor:"#633806",emoji:"Q",
     blocks:[
       {time:"6h–7h20",type:"admin",desc:"Café, ovos, suplementos + deslocamento",energy:"low"},
       {time:"7h30–12h",type:"school",desc:"Aulas",energy:"mid"},
-      {time:"13h–14h30",type:"deepwork",desc:"Gelfand: avançar novo trecho + 30 min exercícios novos",energy:"high"},
+      {time:"13h–14h30",type:"deepwork",desc:"Gelfand: avançar novo trecho + exercícios novos (90 min)",energy:"high"},
       {time:"14h30–15h30",type:"school",desc:"Bloco escolar — provas futuras, revisão ou tarefa",energy:"high"},
       {time:"15h30–16h",type:"reset",desc:"Lanche, buffer para o inesperado",energy:"mid"},
-      {time:"16h–17h30",type:"deepwork",desc:"Gelfand: Bloco extra — avançar conteúdo novo aproveitando tempo liberado (90 min)",energy:"high"},
-      {time:"17h30–18h10",type:"train",desc:"Basquete leve: 40 min de qualidade — ouça o corpo após terça",energy:"mid"},
-      {time:"18h30–19h",type:"reset",desc:"Banho, hidratação",energy:"low"},
+      {time:"16h–17h30",type:"deepwork",desc:"Gelfand: Bloco extra — avançar conteúdo difícil (90 min)",energy:"high"},
+      {time:"17h30–18h",type:"train",desc:"Força: Agachamento / Supino / Terra — 3×6-12 compacto (30 min)",energy:"mid"},
+      {time:"18h–18h30",type:"reset",desc:"Banho, hidratação",energy:"low"},
       {time:"20h+",type:"admin",desc:"Janta, relaxar, dormir no horário",energy:"low"},
     ],
-    tip:"Quinta ganha 1h30 extra de Gelfand pelo treino reduzido. É o melhor dia para avançar conteúdo difícil."
+    tip:"Quinta: Gelfand pesado + força. Aproveite o pico da tarde para o conteúdo mais difícil."
   },
   {
-    name:"Sexta-feira",outcome:"Fechar a semana — Força + revisão Gelfand",
+    name:"Sexta-feira",outcome:"Fechar semana — Gelfand + Basquete",
     color:"#EEEDFE",textColor:"#3C3489",emoji:"S",
     blocks:[
       {time:"6h–7h20",type:"admin",desc:"Café, ovos, suplementos + deslocamento",energy:"low"},
       {time:"7h30–12h",type:"school",desc:"Aulas — último dia da semana escolar",energy:"mid"},
-      {time:"13h–13h50",type:"deepwork",desc:"Gelfand: encerramento — marcar ponto de parada claro",energy:"high"},
-      {time:"14h–15h",type:"school",desc:"Bloco escolar — fechar tarefas pendentes",energy:"high"},
-      {time:"15h–16h30",type:"deepwork",desc:"Gelfand: encerramento da semana — fechar capítulo ou marcar ponto de parada claro (90 min)",energy:"high"},
-      {time:"16h30–17h",type:"reset",desc:"Reset semanal: 10 min — o que fiz, o que fica pra próxima semana",energy:"mid"},
-      {time:"17h–17h30",type:"train",desc:"Força: 3º treino — fecha o ciclo Seg/Qua/Sex (30 min compacto)",energy:"mid"},
-      {time:"17h30+",type:"admin",desc:"Janta, atividade social, descanso — sem culpa",energy:"low"},
+      {time:"13h–14h30",type:"deepwork",desc:"Gelfand: encerramento da semana — fechar capítulo ou marcar ponto de parada (90 min)",energy:"high"},
+      {time:"14h30–15h30",type:"school",desc:"Bloco escolar — fechar tarefas pendentes",energy:"high"},
+      {time:"15h30–16h",type:"reset",desc:"Reset semanal: 10 min — o que fiz, o que fica pra próxima semana",energy:"mid"},
+      {time:"16h–17h",type:"deepwork",desc:"Gelfand: revisão final da semana (60 min)",energy:"high"},
+      {time:"17h–17h40",type:"train",desc:"Basquete: Behind the back / Jump shot / Euro step (40 min)",energy:"mid"},
+      {time:"17h40+",type:"admin",desc:"Janta, atividade social, descanso — sem culpa",energy:"low"},
     ],
-    tip:"Sexta é para fechar ciclos, não abrir novos."
+    tip:"Sexta: fechar Gelfand + basquete. Encerre ciclos, não abra novos."
+  },
+  {
+    name:"Sábado",outcome:"Força + Gelfand livre",
+    color:"#E8F4E8",textColor:"#1A4A1A",emoji:"S",
+    blocks:[
+      {time:"7h–8h",type:"admin",desc:"Acordar com calma, café, ovos, suplementos",energy:"low"},
+      {time:"8h–9h30",type:"deepwork",desc:"Gelfand: Bloco manhã — sem pressão de horário, foco profundo (90 min)",energy:"high"},
+      {time:"9h30–10h",type:"reset",desc:"Pausa, lanche, ar livre",energy:"low"},
+      {time:"10h–11h30",type:"deepwork",desc:"Gelfand: Bloco 2 — exercícios difíceis ou revisão acumulada da semana",energy:"high"},
+      {time:"14h–14h30",type:"train",desc:"Força: Agachamento / Supino / Terra — 3×6-12 compacto (30 min)",energy:"mid"},
+      {time:"14h30–15h",type:"reset",desc:"Banho, lanche, recuperação",energy:"low"},
+      {time:"20h+",type:"admin",desc:"Janta, descanso, dormir no horário",energy:"low"},
+    ],
+    tip:"Sábado é o dia com mais tempo livre. Use a manhã inteira para Gelfand sem interrupção."
+  },
+  {
+    name:"Domingo",outcome:"Basquete + Gelfand + Revisão semanal",
+    color:"#FDF0E0",textColor:"#5C3A00",emoji:"D",
+    blocks:[
+      {time:"7h–8h",type:"admin",desc:"Acordar com calma, café, ovos, suplementos",energy:"low"},
+      {time:"8h–9h30",type:"deepwork",desc:"Gelfand: revisão geral da semana — o que ficou pendente, o que consolidar",energy:"high"},
+      {time:"9h30–10h",type:"reset",desc:"Pausa, lanche",energy:"low"},
+      {time:"10h–10h40",type:"train",desc:"Basquete: Behind the back / Jump shot / Euro step (40 min)",energy:"mid"},
+      {time:"10h40–11h",type:"reset",desc:"Banho, hidratação",energy:"low"},
+      {time:"14h–15h",type:"deepwork",desc:"Gelfand: Bloco tarde — avançar ou consolidar (60 min)",energy:"high"},
+      {time:"15h–15h20",type:"reset",desc:"Revisão semanal: o que funcionou, o que trava, ajuste para segunda",energy:"mid"},
+      {time:"20h+",type:"admin",desc:"Janta leve, preparar semana, dormir cedo",energy:"low"},
+    ],
+    tip:"Domingo: basquete pela manhã, Gelfand à tarde, revisão semanal de 15 min. Dorme cedo para segunda."
   }
 ];
 
